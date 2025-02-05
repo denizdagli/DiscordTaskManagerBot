@@ -28,11 +28,21 @@ def delete_task(task_id):
     return f"Görev silindi: ID {task_id}"
 
 # Tüm görevleri listeleme
-def show_tasks():
+async def task_list():
+    conn = sqlite3.connect("tasks.db")  # Veritabanına bağlan
+    cursor = conn.cursor()
+    
     cursor.execute("SELECT * FROM tasks")
     tasks = cursor.fetchall()
-    for task in tasks:
-        return f"ID: {task[0]}, Açıklama: {task[1]}, Durum: {task[2]}, Eklendiği Tarih: {task[3]}"
+    
+    conn.close()  # Veritabanını kapat
+    
+    if not tasks:
+        return "Henüz eklenmiş bir görev yok."
+
+    task_messages = [f"**ID:** {task[0]}, **Açıklama:** {task[1]}, **Durum:** {task[2]}, **Tarih:** {task[3]}" for task in tasks]
+    
+    return "\n".join(task_messages)
 
 # Görevi tamamlandı olarak işaretleme
 def complete_task(task_id):

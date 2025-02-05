@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from database import add_task, delete_task, show_tasks, complete_task
+from database import add_task, delete_task, task_list, complete_task
 
 
 intents = discord.Intents.default()
@@ -26,11 +26,13 @@ async def delete_task(ctx, task_id: int):
 
 @bot.command()
 async def show_tasks(ctx):
-    tasks = show_tasks()
-    await ctx.send(f'Listing tasks:{tasks}')
+    tasks = await task_list()  # Asenkron fonksiyonu çağırırken `await` ekledik
+    await ctx.send(f"📋 **Görev Listesi:**\n{tasks}")
 
 @bot.command()
 async def complate_task(ctx, task_id: int):
     complete_task(task_id)
     await ctx.send(f'coplated task: {task_id}')
 
+
+bot.run("MTMwMjIzNTY2NTEyNzE4MjM3Nw.GWWI3d.f5Z7yFwaz457GISjWOvixwO0wtNOVuh994KNZs")
