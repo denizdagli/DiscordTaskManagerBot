@@ -1,38 +1,26 @@
-import discord
-from discord.ext import commands
-from database import add_task, delete_task, task_list, complete_task
+from database import add_task, delete_task, show_tasks, complete_task
 
-
-intents = discord.Intents.default()
-intents.message_content = True
-
-bot = commands.Bot(command_prefix='!', intents=intents)
-
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user}')
-    await bot.change_presence(activity=discord.Game(name='!help'))
-
-@bot.command()
-async def add_task(ctx, description: str):
+def handle_add_task(args):
+    if not args:
+        return "Lütfen bir görev açıklaması girin!"
+    description = " ".join(args)
     add_task(description)
-    await ctx.send(f'Adding task: {description}')
-    
+    return f"✅ Görev eklendi: {description}"
 
-@bot.command()
-async def delete_task(ctx, task_id: int):
-    delete_task(task_id)
-    await ctx.send(f'Removing task: {task_id}')
+def handle_delete_task(args):
+    if not args or not args[0].isdigit():
+        return "Lütfen geçerli bir görev ID'si girin!"
+    delete_task(int(args[0]))
+    return f"🗑️ Görev silindi: {args[0]}"
 
-@bot.command()
-async def show_tasks(ctx):
-    tasks = await task_list()  # Asenkron fonksiyonu çağırırken `await` ekledik
-    await ctx.send(f"📋 **Görev Listesi:**\n{tasks}")
+def handle_show_tasks():
+    tasks = show_tasks()
+    if not tasks:
+        return "📭 Görev listesi boş!"
+    return "\n".join([f"{t[0]}. {t[1]} {'✅' if t[2] else '❌'}" for t in tasks])
 
-@bot.command()
-async def complate_task(ctx, task_id: int):
-    complete_task(task_id)
-    await ctx.send(f'coplated task: {task_id}')
-
-
-bot.run("MTMwMjIzNTY2NTEyNzE4MjM3Nw.GWWI3d.f5Z7yFwaz457GISjWOvixwO0wtNOVuh994KNZs")
+def handle_complete_task(args):
+    if not args or not args[0].isdigit():
+        return "Lütfen geçerli bir görev ID'si girin!"
+    complete_task(int(args[0]))
+    return f"✅ Görev tamamlandı: {args[0]}"

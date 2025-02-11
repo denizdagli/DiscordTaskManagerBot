@@ -1,56 +1,48 @@
 import sqlite3
 
-# Veritabanı bağlantısını oluştur
-conn = sqlite3.connect("tasks.db")
-cursor = conn.cursor()
+DB_NAME = "tasks.db"
 
-# Tasks tablosunu oluştur
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    description TEXT NOT NULL,
-    status TEXT CHECK (status IN ('pending', 'completed')) DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
-''')
-conn.commit()
+def create_table():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            description TEXT NOT NULL,
+            completed BOOLEAN NOT NULL DEFAULT 0
+        )
+    """)
+    conn.commit()
+    conn.close()
 
-# Görev ekleme
 def add_task(description):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
     cursor.execute("INSERT INTO tasks (description) VALUES (?)", (description,))
     conn.commit()
-    return f"Görev eklendi: {description}"
+    conn.close()
 
-# Görev silme
 def delete_task(task_id):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
     cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
     conn.commit()
-    return f"Görev silindi: ID {task_id}"
+    conn.close()
 
-# Tüm görevleri listeleme
-async def task_list():
-    conn = sqlite3.connect("tasks.db")  # Veritabanına bağlan
+def show_tasks():
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
     cursor.execute("SELECT * FROM tasks")
     tasks = cursor.fetchall()
-    
-    conn.close()  # Veritabanını kapat
-    
-    if not tasks:
-        return "Henüz eklenmiş bir görev yok."
+    conn.close()
+    return tasks
 
-    task_messages = [f"**ID:** {task[0]}, **Açıklama:** {task[1]}, **Durum:** {task[2]}, **Tarih:** {task[3]}" for task in tasks]
-    
-    return "\n".join(task_messages)
-
-# Görevi tamamlandı olarak işaretleme
 def complete_task(task_id):
-    cursor.execute("UPDATE tasks SET status = 'completed' WHERE id = ?", (task_id,))
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE tasks SET completed = 1 WHERE id = ?", (task_id,))
     conn.commit()
-    return f"Görev tamamlandı olarak işaretlendi: ID {task_id}"
+    conn.close()
 
-
-
-# Bağlantıyı kapat
-conn.close()
+# İlk çalıştırmada tabloyu oluştur
+create_table()
