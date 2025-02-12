@@ -1,8 +1,12 @@
 import discord
+import os
 from discord.ext import commands
+from dotenv import load_dotenv
 from commands import handle_add_task, handle_delete_task, handle_show_tasks, handle_complete_task
 
-TOKEN = "MTMwMjIzNTY2NTEyNzE4MjM3Nw.GI5PJq.MyvHA6nxm8YX1VtKWlbnnkfJI5mi9A5dPyhmAQ"
+load_dotenv()
+
+token = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -34,4 +38,4 @@ async def complete(ctx, *args):
     response = handle_complete_task(args)
     await ctx.send(response)
 
-bot.run(TOKEN)
+bot.run(token)
