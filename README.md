@@ -82,10 +82,12 @@ taskbot/
     └── test_delete_task.py   
     └── test_show_task.py   
 
+```
 
 ## Testing
 ```bash
 pytest tests/
+```
 
 ## Contributing
 
