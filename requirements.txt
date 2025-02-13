@@ -2,3 +2,4 @@ discord.py
 python-dotenv
 sqlite3
 flask
+pytest

@@ -4,10 +4,12 @@ TaskBot is a simple and easy-to-use Discord bot for managing tasks in your serve
 
 ## Features
 
-- **Add New Tasks**: Add tasks with descriptions.
-- **Delete Tasks**: Remove tasks by their ID.
-- **Complete Tasks**: Mark tasks as completed.
-- **View All Tasks**: List all tasks with their completion status.
+- ✨ Add tasks with descriptions.  
+- 🗑️ Remove tasks by their ID. 
+- ✅ Mark tasks as completed.
+- 📝 List all tasks with their completion status.
+- 💾 Persistent storage using SQLite database
+- 🧪 Comprehensive test coverage
 
 ## Installation
 
@@ -74,8 +76,25 @@ taskbot/
 ├── requirements.txt       # Required Python dependencies
 └── README.md              # This file
 └── tests/                 # Test folder
-    ├── __init__.py        # Marks this folder as a Python package
+    ├── __init__.py        # This file makes the tests/ folder a Python package
     ├── test_add_task.py   
     └── test_complete_task.py   
     └── test_delete_task.py   
     └── test_show_task.py   
+
+
+## Testing
+```bash
+pytest tests/
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch: ``git checkout -b feature-name``
+3. Make your changes and commit:`` git commit -m 'Add some feature'``
+4. Push to the branch: ``git push origin feature-name``
+5. Submit a pull request
+
+
+### And
+Thanks to the Discord.py team for their excellent library
