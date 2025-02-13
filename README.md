@@ -25,8 +25,8 @@ TaskBot is a simple and easy-to-use Discord bot for managing tasks in your serve
 1. Clone the repository:
    
    ```bash
-   git clone https://github.com/yourusername/taskbot.git
-   cd taskbot
+   git clone https://github.com/denizdagli/DiscordTaskManagerBot.git
+   cd DiscordTaskManagerBot
 
 2. Install the required dependencies:
     ```bash
